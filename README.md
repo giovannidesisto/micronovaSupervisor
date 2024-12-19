@@ -13,10 +13,9 @@ Please READ the MicronovaSupervisor.pdf to get an overview of the project
 
 
 # in order to install required sw run the following scripts #
-`
-chmod +x install.sh
-sudo ./install.sh
-`
+`chmod +x install.sh`
+`sudo ./install.sh`
+
 
 - it is possible to update the MariaDb config by running  `mysql_secure_installation` command in temrinal
 - after installation is possible to get access to grafana at url http://127.0.0.1:3000 user admin, pwd admin
