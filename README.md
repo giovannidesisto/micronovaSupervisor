@@ -7,9 +7,9 @@ By usign several sw & hw modules, the goal of the project is providing a full pl
 * define a TTL level adapter between the most common UART Full duplex interfaces and the 5V
 * define a whole comprensive architecture for reading data, storicize them and analize them
 
-
-
 Please READ the [MicronovaSupervisor.pdf](/MicronovaSupervisor.pdf) to get an overview of the project
+
+![System layout](/ProjectDocumentation/ProjectBlockDiagram.jpeg "System layout")
 
 
 # setup procedure #
