@@ -26,7 +26,7 @@ Please READ the MicronovaSupervisor.pdf to get an overview of the project
     3.2) `mysql -u root -proot micronovaLogger < ./createLogTable.sql`    
 
 
-4) configure your Arduino MKR1010 by uploading the following script 2MKR1010_WIFI_READ_WRITE/MKR1010_WIFI_READ_WRITE.ino'  
+4) configure your Arduino MKR1010 by uploading the following script [MKR1010_WIFI_READ_WRITE.ino](/MKR1010_WIFI_READ_WRITE/MKR1010_WIFI_READ_WRITE.ino)  
     - change your SSID & PWD to let the board to use your WiFi  
     - change the ip & port to let the board to send the readed datagram to your server (check your WiFi ip typing  `ip a | grep wl`)  
 
