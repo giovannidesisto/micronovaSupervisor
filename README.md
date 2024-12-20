@@ -9,7 +9,7 @@ By usign several sw & hw modules, the goal of the project is providing a full pl
 
 
 
-Please READ the MicronovaSupervisor.pdf to get an overview of the project
+Please READ the [MicronovaSupervisor.pdf](/MicronovaSupervisor.pdf) to get an overview of the project
 
 
 # setup procedure #
