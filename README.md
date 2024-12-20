@@ -1,5 +1,5 @@
 # micronovaSupervisor
-A simple project to supervise your Micronova contoller base stove / boiler
+A simple project to supervise your Micronova contoller based stove / boiler
 
 By usign several sw & hw modules, the goal of the project is providing a full platform to
 * log data from the boiler into db timeseries for further analisys
