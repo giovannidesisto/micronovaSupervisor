@@ -30,7 +30,11 @@ Please READ the [MicronovaSupervisor.pdf](/MicronovaSupervisor.pdf) to get an ov
     - change your SSID & PWD to let the board to use your WiFi  
     - change the ip & port to let the board to send the readed datagram to your server (check your WiFi ip typing  `ip a | grep wl`)  
 
-5) Test the UART adapter using an Oscilloscope: the level of RX signals on the Emitter of the PNP transistor MUST be 5V  
+5) Test the UART adapter using an Oscilloscope: the level of RX signals on the Emitter of the PNP transistor MUST be 5V
+
+
+![Adapter schematics](/ProjectDocumentation/micronovaUartAdapter.png "Adapter schematics")
+
 
 6) Compile & Start Java Spooler Buffer  
     6.1) change dir         `cd SpoolerBuffer/`  
