@@ -32,7 +32,7 @@ Please READ the [MicronovaSupervisor.pdf](/MicronovaSupervisor.pdf) to get an ov
 
 5) Test the UART adapter using an Oscilloscope: the level of RX signals on the Emitter of the PNP transistor MUST be 5V
 
-![Oscilloscope capture](/img/osciloscope_capture.png "Oscilloscope capture")
+![Oscilloscope capture](/img/oscilloscpe_capture.png "Oscilloscope capture")
 
 In the prev image is visible a request and consequent reply to the stove
 
