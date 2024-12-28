@@ -46,7 +46,7 @@ In the prev image is visible a request and consequent reply to the stove
     
     
     
-7) Import the Grafana to get the preconfigured dashboard 
+7) Import the Grafana to get the preconfigured dashboard - Download the [Configuration file](/ProjectDocumentation/grafana_cfg.json)
 
 ![Overview](/img/overview_start.png "Overview - starting the boiler")
 
