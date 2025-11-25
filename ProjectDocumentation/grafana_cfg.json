@@ -1,47 +1,4 @@
 {
-  "__inputs": [
-    {
-      "name": "DS_MYSQL",
-      "label": "mysql",
-      "description": "",
-      "type": "datasource",
-      "pluginId": "mysql",
-      "pluginName": "MySQL"
-    }
-  ],
-  "__elements": {},
-  "__requires": [
-    {
-      "type": "panel",
-      "id": "gauge",
-      "name": "Gauge",
-      "version": ""
-    },
-    {
-      "type": "grafana",
-      "id": "grafana",
-      "name": "Grafana",
-      "version": "11.4.0"
-    },
-    {
-      "type": "datasource",
-      "id": "mysql",
-      "name": "MySQL",
-      "version": "11.3.1"
-    },
-    {
-      "type": "panel",
-      "id": "state-timeline",
-      "name": "State timeline",
-      "version": ""
-    },
-    {
-      "type": "panel",
-      "id": "timeseries",
-      "name": "Time series",
-      "version": ""
-    }
-  ],
   "annotations": {
     "list": [
       {
@@ -61,13 +18,13 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": null,
+  "id": 3,
   "links": [],
   "panels": [
     {
       "datasource": {
         "type": "mysql",
-        "uid": "${DS_MYSQL}"
+        "uid": "ce6olsxogtblse"
       },
       "fieldConfig": {
         "defaults": {
@@ -75,7 +32,7 @@
             "mode": "fixed"
           },
           "custom": {
-            "fillOpacity": 70,
+            "fillOpacity": 100,
             "hideFrom": {
               "legend": false,
               "tooltip": false,
@@ -83,7 +40,7 @@
             },
             "insertNulls": false,
             "lineWidth": 0,
-            "spanNulls": false
+            "spanNulls": true
           },
           "mappings": [
             {
@@ -124,7 +81,7 @@
                   "text": "Pulizia finale"
                 },
                 "7": {
-                  "color": "#808080",
+                  "color": "text",
                   "index": 7,
                   "text": "Stand-by"
                 },
@@ -181,12 +138,12 @@
       "options": {
         "alignValue": "left",
         "legend": {
-          "displayMode": "table",
+          "displayMode": "list",
           "placement": "bottom",
           "showLegend": true
         },
         "mergeValues": true,
-        "rowHeight": 0.9,
+        "rowHeight": 0,
         "showValue": "auto",
         "tooltip": {
           "mode": "single",
@@ -197,10 +154,14 @@
       "targets": [
         {
           "dataset": "klover",
+          "datasource": {
+            "type": "mysql",
+            "uid": "ce8gla2kkw3y8d"
+          },
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT creation_date, CAST(CONV(HEX(SUBSTRING(datagram, 34, 1)), 16, 10) AS INT)  \nas STATE FROM klover.stove_log \nORDER BY creation_date DESC\nLIMIT 1440;\n",
+          "rawSql": "SELECT creation_date, CAST(CONV(HEX(SUBSTRING(datagram, 34, 1)), 16, 10) AS INT)  \nas STATE FROM klover.stove_log \nORDER BY creation_date DESC\n;\n",
           "refId": "A",
           "sql": {
             "columns": [
@@ -218,20 +179,16 @@
               }
             ],
             "limit": 50
-          },
-          "datasource": {
-            "type": "mysql",
-            "uid": "${DS_MYSQL}"
           }
         }
       ],
-      "title": "State",
+      "title": "Stato caldaia",
       "type": "state-timeline"
     },
     {
       "datasource": {
         "type": "mysql",
-        "uid": "${DS_MYSQL}"
+        "uid": "ce6olsxogtblse"
       },
       "fieldConfig": {
         "defaults": {
@@ -239,7 +196,7 @@
             "mode": "thresholds"
           },
           "custom": {
-            "fillOpacity": 70,
+            "fillOpacity": 100,
             "hideFrom": {
               "legend": false,
               "tooltip": false,
@@ -258,7 +215,7 @@
                 "value": null
               },
               {
-                "color": "transparent",
+                "color": "#ccccdc",
                 "value": 0
               },
               {
@@ -313,10 +270,14 @@
       "targets": [
         {
           "dataset": "klover",
+          "datasource": {
+            "type": "mysql",
+            "uid": "ce8gla2kkw3y8d"
+          },
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT creation_date, CAST(CONV(HEX(SUBSTRING(datagram, 53, 1)), 16, 10) AS INT)  \nas Level FROM klover.stove_log \nORDER BY creation_date DESC\nLIMIT 1440;\n",
+          "rawSql": "SELECT creation_date,\n  CASE \n    WHEN  CAST(CONV(HEX(SUBSTRING(datagram, 34, 1)), 16, 10) AS INT)  = 7\n    or CAST(CONV(HEX(SUBSTRING(datagram, 34, 1)), 16, 10) AS INT)  = 0 then 0\n    ELSE  CAST(CONV(HEX(SUBSTRING(datagram, 53, 1)), 16, 10) AS INT)  \n  END AS Level \nFROM klover.stove_log \nORDER BY creation_date DESC\n;\n",
           "refId": "A",
           "sql": {
             "columns": [
@@ -334,362 +295,16 @@
               }
             ],
             "limit": 50
-          },
-          "datasource": {
-            "type": "mysql",
-            "uid": "${DS_MYSQL}"
           }
         }
       ],
-      "title": "Power",
+      "title": "Livello di potenza",
       "type": "state-timeline"
     },
     {
       "datasource": {
         "type": "mysql",
-        "uid": "${DS_MYSQL}"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "barWidthFactor": 0.6,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "dashed"
-            }
-          },
-          "fieldMinMax": false,
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "super-light-blue",
-                "value": 0
-              },
-              {
-                "color": "super-light-yellow",
-                "value": 40
-              },
-              {
-                "color": "yellow",
-                "value": 50
-              },
-              {
-                "color": "orange",
-                "value": 65
-              },
-              {
-                "color": "dark-orange",
-                "value": 70
-              },
-              {
-                "color": "dark-red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "celsius"
-        },
-        "overrides": [
-          {
-            "__systemRef": "hideSeriesFrom",
-            "matcher": {
-              "id": "byNames",
-              "options": {
-                "mode": "exclude",
-                "names": [
-                  "WATER_TEMPERATURE"
-                ],
-                "prefix": "All except:",
-                "readOnly": true
-              }
-            },
-            "properties": [
-              {
-                "id": "custom.hideFrom",
-                "value": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": false
-                }
-              }
-            ]
-          }
-        ]
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 0,
-        "y": 8
-      },
-      "id": 1,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "pluginVersion": "11.4.0",
-      "targets": [
-        {
-          "dataset": "klover",
-          "datasource": {
-            "type": "mysql",
-            "uid": "${DS_MYSQL}"
-          },
-          "editorMode": "code",
-          "format": "table",
-          "rawQuery": true,
-          "rawSql": "SELECT creation_date, CAST(CONV(HEX(SUBSTRING(datagram, 4, 1)), 16, 10) AS INT)  \nas C° FROM klover.stove_log \nORDER BY creation_date DESC\nLIMIT 1440;\n\n",
-          "refId": "A",
-          "sql": {
-            "columns": [
-              {
-                "parameters": [
-                  {
-                    "name": "creation_date",
-                    "type": "functionParameter"
-                  }
-                ],
-                "type": "function"
-              },
-              {
-                "parameters": [
-                  {
-                    "name": "datagram",
-                    "type": "functionParameter"
-                  }
-                ],
-                "type": "function"
-              }
-            ],
-            "groupBy": [
-              {
-                "property": {
-                  "type": "string"
-                },
-                "type": "groupBy"
-              }
-            ],
-            "limit": 1440,
-            "orderBy": {
-              "property": {
-                "name": "creation_date",
-                "type": "string"
-              },
-              "type": "property"
-            },
-            "orderByDirection": "DESC"
-          },
-          "table": "stove_log"
-        }
-      ],
-      "title": "Water temperature",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "mysql",
-        "uid": "${DS_MYSQL}"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds",
-            "seriesBy": "last"
-          },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "barWidthFactor": 0.6,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "dashed"
-            }
-          },
-          "fieldMinMax": false,
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "super-light-blue",
-                "value": 0
-              },
-              {
-                "color": "super-light-yellow",
-                "value": 50
-              },
-              {
-                "color": "yellow",
-                "value": 100
-              },
-              {
-                "color": "dark-orange",
-                "value": 150
-              },
-              {
-                "color": "dark-red",
-                "value": 250
-              }
-            ]
-          },
-          "unit": "celsius"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 8
-      },
-      "id": 3,
-      "options": {
-        "legend": {
-          "calcs": [
-            "mean"
-          ],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "pluginVersion": "11.4.0",
-      "targets": [
-        {
-          "dataset": "klover",
-          "datasource": {
-            "type": "mysql",
-            "uid": "${DS_MYSQL}"
-          },
-          "editorMode": "code",
-          "format": "table",
-          "rawQuery": true,
-          "rawSql": "SELECT creation_date, \nCAST(\nCONV(CONCAT(HEX(SUBSTRING(datagram, 92, 1)), HEX(SUBSTRING(datagram, 91, 1))), 16, 10)  \nas INT)\nas C° \n\nFROM klover.stove_log \nORDER BY creation_date DESC LIMIT 1440;\n",
-          "refId": "A",
-          "sql": {
-            "columns": [
-              {
-                "parameters": [
-                  {
-                    "name": "creation_date",
-                    "type": "functionParameter"
-                  }
-                ],
-                "type": "function"
-              },
-              {
-                "parameters": [
-                  {
-                    "name": "datagram",
-                    "type": "functionParameter"
-                  }
-                ],
-                "type": "function"
-              }
-            ],
-            "groupBy": [
-              {
-                "property": {
-                  "type": "string"
-                },
-                "type": "groupBy"
-              }
-            ],
-            "limit": 1440,
-            "orderBy": {
-              "property": {
-                "name": "creation_date",
-                "type": "string"
-              },
-              "type": "property"
-            },
-            "orderByDirection": "DESC"
-          },
-          "table": "stove_log"
-        }
-      ],
-      "title": "Fumes Temperature",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "mysql",
-        "uid": "${DS_MYSQL}"
+        "uid": "ce6olsxogtblse"
       },
       "fieldConfig": {
         "defaults": {
@@ -699,7 +314,7 @@
           "fieldMinMax": false,
           "mappings": [],
           "max": 85,
-          "min": 15,
+          "min": 10,
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -708,36 +323,103 @@
                 "value": null
               },
               {
-                "color": "super-light-blue",
+                "color": "light-blue",
                 "value": 0
               },
               {
                 "color": "super-light-yellow",
-                "value": 40
+                "value": 45
               },
               {
-                "color": "yellow",
-                "value": 50
+                "color": "super-light-yellow",
+                "value": 55
+              },
+              {
+                "color": "dark-yellow",
+                "value": 65
               },
               {
                 "color": "dark-orange",
-                "value": 70
+                "value": 75
               },
               {
                 "color": "dark-red",
-                "value": 80
+                "value": 85
               }
             ]
           },
           "unit": "celsius"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Pressione"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "pressurepsi"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "thresholds"
+                }
+              },
+              {
+                "id": "min",
+                "value": 0
+              },
+              {
+                "id": "max",
+                "value": 3
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "super-light-blue",
+                      "value": 0
+                    },
+                    {
+                      "color": "blue",
+                      "value": 0.5
+                    },
+                    {
+                      "color": "green",
+                      "value": 1
+                    },
+                    {
+                      "color": "dark-yellow",
+                      "value": 1.9
+                    },
+                    {
+                      "color": "dark-orange",
+                      "value": 2.5
+                    },
+                    {
+                      "color": "dark-red",
+                      "value": 3
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
-        "h": 7,
-        "w": 6,
+        "h": 5,
+        "w": 16,
         "x": 0,
-        "y": 16
+        "y": 8
       },
       "id": 6,
       "options": {
@@ -761,12 +443,12 @@
           "dataset": "klover",
           "datasource": {
             "type": "mysql",
-            "uid": "${DS_MYSQL}"
+            "uid": "ce8gla2kkw3y8d"
           },
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT creation_date, CAST(CONV(HEX(SUBSTRING(datagram, 4, 1)), 16, 10) AS INT)  \nas C° FROM klover.stove_log \nORDER BY creation_date DESC\nLIMIT 1;\n\n",
+          "rawSql": "SELECT creation_date,\nCAST(CONV(HEX(SUBSTRING(datagram, 4, 1)), 16, 10) AS INT)  as Mandata,\nCAST(CONV(HEX(SUBSTRING(datagram, 134, 1)), 16, 10) AS INT)  as Accumulo,\nCAST( CONV(CONCAT(HEX(SUBSTRING(datagram, 134, 1)), HEX(SUBSTRING(datagram, 133, 1))), 16, 10)   as INT)/10000 as Pressione\n\n FROM klover.stove_log \nORDER BY creation_date DESC\nLIMIT 1;\n\n",
           "refId": "A",
           "sql": {
             "columns": [
@@ -810,13 +492,13 @@
           "table": "stove_log"
         }
       ],
-      "title": "Water temperature",
+      "title": "Valori istantanei impianto tecnico",
       "type": "gauge"
     },
     {
       "datasource": {
         "type": "mysql",
-        "uid": "${DS_MYSQL}"
+        "uid": "ce6olsxogtblse"
       },
       "fieldConfig": {
         "defaults": {
@@ -825,8 +507,8 @@
           },
           "fieldMinMax": false,
           "mappings": [],
-          "max": 300,
-          "min": 10,
+          "max": 250,
+          "min": 20,
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -852,7 +534,359 @@
               },
               {
                 "color": "dark-red",
-                "value": 250
+                "value": 200
+              }
+            ]
+          },
+          "unit": "celsius"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 8,
+        "x": 16,
+        "y": 8
+      },
+      "id": 12,
+      "options": {
+        "minVizHeight": 75,
+        "minVizWidth": 75,
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "sizing": "auto"
+      },
+      "pluginVersion": "11.4.0",
+      "targets": [
+        {
+          "dataset": "klover",
+          "datasource": {
+            "type": "mysql",
+            "uid": "ce8gla2kkw3y8d"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT creation_date, \nCAST(CONV(HEX(SUBSTRING(datagram, 60, 1)), 16, 10) AS INT)  \nas t1,\nCAST(CONV(HEX(SUBSTRING(datagram, 129, 1)), 16, 10) AS INT)  \nas t2,\nCAST(CONV(HEX(SUBSTRING(datagram, 132, 1)), 16, 10) AS INT)  \nas t3\n FROM klover.stove_log \nORDER BY creation_date DESC\nLIMIT 1;\n\n",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [
+                  {
+                    "name": "creation_date",
+                    "type": "functionParameter"
+                  }
+                ],
+                "type": "function"
+              },
+              {
+                "parameters": [
+                  {
+                    "name": "datagram",
+                    "type": "functionParameter"
+                  }
+                ],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 1440,
+            "orderBy": {
+              "property": {
+                "name": "creation_date",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "orderByDirection": "DESC"
+          },
+          "table": "stove_log"
+        }
+      ],
+      "title": "Temperatura fumi camino",
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "mysql",
+        "uid": "ce6olsxogtblse"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "purple",
+            "mode": "fixed"
+          },
+          "decimals": 1,
+          "fieldMinMax": false,
+          "mappings": [],
+          "max": 8,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "t_min"
+            },
+            "properties": []
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 0,
+        "y": 13
+      },
+      "id": 15,
+      "options": {
+        "minVizHeight": 75,
+        "minVizWidth": 75,
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "sizing": "auto"
+      },
+      "pluginVersion": "11.4.0",
+      "targets": [
+        {
+          "dataset": "klover",
+          "datasource": {
+            "type": "mysql",
+            "uid": "ce8gla2kkw3y8d"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT creation_date, \nCAST(CONV(HEX(SUBSTRING(datagram, 14 , 1)), 16, 10) AS INT)/10  as t\nFROM klover.stove_log \nORDER BY creation_date DESC\nLIMIT 1;\n\n",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [
+                  {
+                    "name": "creation_date",
+                    "type": "functionParameter"
+                  }
+                ],
+                "type": "function"
+              },
+              {
+                "parameters": [
+                  {
+                    "name": "datagram",
+                    "type": "functionParameter"
+                  }
+                ],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 1440,
+            "orderBy": {
+              "property": {
+                "name": "creation_date",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "orderByDirection": "DESC"
+          },
+          "table": "stove_log"
+        }
+      ],
+      "title": "Tempo Estrattore pellet",
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "mysql",
+        "uid": "ce6olsxogtblse"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "fixed"
+          },
+          "decimals": 0,
+          "fieldMinMax": false,
+          "mappings": [],
+          "max": 2800,
+          "min": 40,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "rotrpm"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 4,
+        "y": 13
+      },
+      "id": 7,
+      "options": {
+        "minVizHeight": 75,
+        "minVizWidth": 75,
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "sizing": "auto"
+      },
+      "pluginVersion": "11.4.0",
+      "targets": [
+        {
+          "dataset": "klover",
+          "datasource": {
+            "type": "mysql",
+            "uid": "ce8gla2kkw3y8d"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT creation_date,  \n250+CAST( CONV(CONCAT(HEX(SUBSTRING(datagram, 57, 1)), HEX(SUBSTRING(datagram, 56, 1))), 16, 10)   as INT)*10 \nas Rpm  FROM klover.stove_log  \nORDER BY creation_date DESC LIMIT 1;\n\n",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [
+                  {
+                    "name": "creation_date",
+                    "type": "functionParameter"
+                  }
+                ],
+                "type": "function"
+              },
+              {
+                "parameters": [
+                  {
+                    "name": "datagram",
+                    "type": "functionParameter"
+                  }
+                ],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 1440,
+            "orderBy": {
+              "property": {
+                "name": "creation_date",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "orderByDirection": "DESC"
+          },
+          "table": "stove_log"
+        }
+      ],
+      "title": "RPM Fumi",
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "mysql",
+        "uid": "ce6olsxogtblse"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "fieldMinMax": false,
+          "mappings": [],
+          "max": 880,
+          "min": 40,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "super-light-blue",
+                "value": 0
+              },
+              {
+                "color": "super-light-yellow",
+                "value": 200
+              },
+              {
+                "color": "yellow",
+                "value": 400
+              },
+              {
+                "color": "dark-orange",
+                "value": 600
+              },
+              {
+                "color": "dark-red",
+                "value": 800
               }
             ]
           },
@@ -877,12 +911,12 @@
         ]
       },
       "gridPos": {
-        "h": 7,
-        "w": 6,
-        "x": 6,
-        "y": 16
+        "h": 4,
+        "w": 8,
+        "x": 8,
+        "y": 13
       },
-      "id": 7,
+      "id": 13,
       "options": {
         "minVizHeight": 75,
         "minVizWidth": 75,
@@ -904,12 +938,12 @@
           "dataset": "klover",
           "datasource": {
             "type": "mysql",
-            "uid": "${DS_MYSQL}"
+            "uid": "ce8gla2kkw3y8d"
           },
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT creation_date, \nCAST(\nCONV(CONCAT(HEX(SUBSTRING(datagram, 92, 1)), HEX(SUBSTRING(datagram, 91, 1))), 16, 10)  \nas INT)\nas C° \nFROM klover.stove_log \nORDER BY creation_date DESC LIMIT 1;\n",
+          "rawSql": "SELECT creation_date, \nCAST(\nCONV(CONCAT(HEX(SUBSTRING(datagram, 90, 1)), HEX(SUBSTRING(datagram, 91, 1))), 16, 10)  \nas INT)\nas C° \nFROM klover.stove_log \nORDER BY creation_date DESC LIMIT 1;\n",
           "refId": "A",
           "sql": {
             "columns": [
@@ -953,13 +987,315 @@
           "table": "stove_log"
         }
       ],
-      "title": "Fumes Temperature",
+      "title": "Temperatura fumi camera combustione",
       "type": "gauge"
     },
     {
       "datasource": {
         "type": "mysql",
-        "uid": "${DS_MYSQL}"
+        "uid": "ce6olsxogtblse"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 1,
+            "pointSize": 3,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "fieldMinMax": false,
+          "mappings": [],
+          "max": 85,
+          "min": 40,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "celsius"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "th20_MANDATA"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "dark-red",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 2
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "th20_ACCUMULO"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "dark-blue",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 2
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "th20_MAX"
+            },
+            "properties": [
+              {
+                "id": "custom.lineWidth",
+                "value": 1
+              },
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    10,
+                    10
+                  ],
+                  "fill": "dash"
+                }
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "dark-red",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.pointSize",
+                "value": 0
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "th20_SET_POINT"
+            },
+            "properties": [
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    10,
+                    10
+                  ],
+                  "fill": "dash"
+                }
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "dark-yellow",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.pointSize",
+                "value": 0
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "CIRCOLATORE"
+            },
+            "properties": [
+              {
+                "id": "custom.lineInterpolation",
+                "value": "stepAfter"
+              },
+              {
+                "id": "custom.axisPlacement",
+                "value": "right"
+              },
+              {
+                "id": "unit",
+                "value": "bool_on_off"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.pointSize",
+                "value": 0
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Pressione"
+            },
+            "properties": [
+              {
+                "id": "custom.axisPlacement",
+                "value": "right"
+              },
+              {
+                "id": "unit",
+                "value": "pressurepsi"
+              },
+              {
+                "id": "min"
+              },
+              {
+                "id": "max"
+              },
+              {
+                "id": "decimals",
+                "value": 2
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "dark-green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 24,
+        "x": 0,
+        "y": 17
+      },
+      "id": 1,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.4.0",
+      "targets": [
+        {
+          "dataset": "klover",
+          "datasource": {
+            "type": "mysql",
+            "uid": "ce8gla2kkw3y8d"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT creation_date, \nCAST(CONV(HEX(SUBSTRING(datagram, 4, 1)), 16, 10) AS INT)  as th20_MANDATA,\nCAST(CONV(HEX(SUBSTRING(datagram, 134, 1)), 16, 10) AS INT)  as th20_ACCUMULO,\nCAST(CONV(HEX(SUBSTRING(datagram, 82, 1)), 16, 10) AS INT)  as th20_SET_POINT,\nCAST(CONV(HEX(SUBSTRING(datagram, 10, 1)), 16, 10) AS INT)  as th20_MAX,\nCAST(CONV(HEX(SUBSTRING(datagram, 47, 1)), 16, 10) AS INT)/3  as CIRCOLATORE,\nCAST( CONV(CONCAT(HEX(SUBSTRING(datagram, 134, 1)), HEX(SUBSTRING(datagram, 133, 1))), 16, 10)   as INT)/10000 as Pressione\n\n\n\n\n\nFROM klover.stove_log \nORDER BY creation_date DESC\n;\n\n",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [
+                  {
+                    "name": "creation_date",
+                    "type": "functionParameter"
+                  }
+                ],
+                "type": "function"
+              },
+              {
+                "parameters": [
+                  {
+                    "name": "datagram",
+                    "type": "functionParameter"
+                  }
+                ],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 1440,
+            "orderBy": {
+              "property": {
+                "name": "creation_date",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "orderByDirection": "DESC"
+          },
+          "table": "stove_log"
+        }
+      ],
+      "title": "Impianto tecnico",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "mysql",
+        "uid": "ce6olsxogtblse"
       },
       "fieldConfig": {
         "defaults": {
@@ -984,9 +1320,9 @@
               "viz": false
             },
             "insertNulls": false,
-            "lineInterpolation": "linear",
+            "lineInterpolation": "smooth",
             "lineWidth": 1,
-            "pointSize": 5,
+            "pointSize": 3,
             "scaleDistribution": {
               "type": "linear"
             },
@@ -1001,7 +1337,7 @@
             }
           },
           "mappings": [],
-          "max": 3000,
+          "max": 2800,
           "min": 0,
           "thresholds": {
             "mode": "absolute",
@@ -1034,13 +1370,52 @@
           },
           "unit": "rotrpm"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Temporizzazione coclea"
+            },
+            "properties": [
+              {
+                "id": "custom.lineInterpolation",
+                "value": "smooth"
+              },
+              {
+                "id": "custom.axisPlacement",
+                "value": "right"
+              },
+              {
+                "id": "unit",
+                "value": "s"
+              },
+              {
+                "id": "min",
+                "value": 0
+              },
+              {
+                "id": "max"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "purple",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "decimals",
+                "value": 1
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 16
+        "h": 10,
+        "w": 24,
+        "x": 0,
+        "y": 29
       },
       "id": 8,
       "options": {
@@ -1059,10 +1434,14 @@
       "targets": [
         {
           "dataset": "klover",
+          "datasource": {
+            "type": "mysql",
+            "uid": "ce8gla2kkw3y8d"
+          },
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT creation_date,  \nCAST( CONV(CONCAT(HEX(SUBSTRING(datagram, 57, 1)), HEX(SUBSTRING(datagram, 56, 1))), 16, 10)   as INT)*10 \nas Rpm  FROM klover.stove_log  \nORDER BY creation_date DESC LIMIT 1440;",
+          "rawSql": "SELECT creation_date,\n\nCASE\nWHEN CAST( CONV(CONCAT(HEX(SUBSTRING(datagram, 57, 1)), HEX(SUBSTRING(datagram, 56, 1))), 16, 10)   as INT) <> 0\nTHEN\n250+CAST( CONV(CONCAT(HEX(SUBSTRING(datagram, 57, 1)), HEX(SUBSTRING(datagram, 56, 1))), 16, 10)   as INT)*10\nELSE 0 \nEND AS \"Rpm estrattore\",\nCAST(CONV(HEX(SUBSTRING(datagram, 14 , 1)), 16, 10) AS INT)/10  as \"Temporizzazione coclea\"\nFROM klover.stove_log  \nORDER BY creation_date DESC ;",
           "refId": "A",
           "sql": {
             "columns": [
@@ -1080,20 +1459,197 @@
               }
             ],
             "limit": 50
-          },
-          "datasource": {
-            "type": "mysql",
-            "uid": "${DS_MYSQL}"
           }
         }
       ],
-      "title": "Rpm",
+      "title": "Utenze (Estrattore e Coclea)",
       "type": "timeseries"
     },
     {
       "datasource": {
         "type": "mysql",
-        "uid": "${DS_MYSQL}"
+        "uid": "ce6olsxogtblse"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "text",
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 1,
+            "pointSize": 3,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "fieldMinMax": false,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "celsius"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "t_fumes_min"
+            },
+            "properties": [
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    10,
+                    10
+                  ],
+                  "fill": "dash"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "t_fire"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "dark-red",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.axisPlacement",
+                "value": "right"
+              },
+              {
+                "id": "min"
+              },
+              {
+                "id": "max"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 24,
+        "x": 0,
+        "y": 39
+      },
+      "id": 10,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.4.0",
+      "targets": [
+        {
+          "dataset": "klover",
+          "datasource": {
+            "type": "mysql",
+            "uid": "ce8gla2kkw3y8d"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT creation_date, \nCAST(CONV(HEX(SUBSTRING(datagram, 60, 1)), 16, 10) AS DOUBLE)  as t_fumes_1,\nCAST(CONV(HEX(SUBSTRING(datagram, 129, 1)), 16, 10) AS DOUBLE)  as t_fumes_2,\nCAST(CONV(HEX(SUBSTRING(datagram, 132, 1)), 16, 10) AS DOUBLE)  as t_fumes_3,\n-- CAST(CONV(HEX(SUBSTRING(datagram, 66, 1)), 16, 10) AS DOUBLE)  as t_fumes_min,\nCAST(CONV(CONCAT(HEX(SUBSTRING(datagram, 90, 1)), HEX(SUBSTRING(datagram, 91, 1))), 16, 10)  as DOUBLE) t_fire\nFROM klover.stove_log \nORDER BY creation_date DESC\n;\n\n",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [
+                  {
+                    "name": "creation_date",
+                    "type": "functionParameter"
+                  }
+                ],
+                "type": "function"
+              },
+              {
+                "name": "AVG",
+                "parameters": [
+                  {
+                    "name": "datagram",
+                    "type": "functionParameter"
+                  }
+                ],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 1440,
+            "orderBy": {
+              "property": {
+                "name": "creation_date",
+                "type": "string"
+              },
+              "type": "property"
+            },
+            "orderByDirection": "DESC"
+          },
+          "table": "stove_log"
+        }
+      ],
+      "title": "Temperature fumi",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "mysql",
+        "uid": "ce6olsxogtblse"
       },
       "fieldConfig": {
         "defaults": {
@@ -1120,7 +1676,7 @@
             "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
-            "pointSize": 5,
+            "pointSize": 1,
             "scaleDistribution": {
               "type": "linear"
             },
@@ -1150,9 +1706,9 @@
       },
       "gridPos": {
         "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 24
+        "w": 24,
+        "x": 0,
+        "y": 49
       },
       "id": 9,
       "options": {
@@ -1176,7 +1732,7 @@
           "dataset": "klover",
           "datasource": {
             "type": "mysql",
-            "uid": "${DS_MYSQL}"
+            "uid": "ce8gla2kkw3y8d"
           },
           "editorMode": "code",
           "format": "table",
@@ -1225,23 +1781,24 @@
           "table": "stove_log"
         }
       ],
-      "title": "Amb Temp & Humidity",
+      "title": "Sensore bordo scheda temperatura e umidità ambiente",
       "type": "timeseries"
     }
   ],
+  "preload": false,
   "schemaVersion": 40,
   "tags": [],
   "templating": {
     "list": []
   },
   "time": {
-    "from": "now-6h",
+    "from": "now-15m",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "Europe/Rome",
-  "title": "GENERAL",
+  "title": "GENERAL_DASH",
   "uid": "ee76glkq08k5cf",
-  "version": 41,
+  "version": 19,
   "weekStart": ""
 }
