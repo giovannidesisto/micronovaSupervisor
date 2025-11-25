@@ -1,0 +1,127 @@
+[
+    {
+        "id": "48e1fdf83194502a",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "mqtt_broker_config",
+        "type": "mqtt-broker",
+        "name": "Mosquitto Broker",
+        "broker": "127.0.0.1",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "compatmode": false,
+        "protocolVersion": 4,
+        "keepalive": "60",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "5b9105d26c12d1b1",
+        "type": "MySQLdatabase",
+        "name": "MysqlLocale",
+        "host": "127.0.0.1",
+        "port": "3306",
+        "db": "klover",
+        "tz": "",
+        "charset": "UTF8"
+    },
+    {
+        "id": "d7c550351f83ab74",
+        "type": "mqtt in",
+        "z": "48e1fdf83194502a",
+        "name": "Klover MQTT IN",
+        "topic": "klover",
+        "qos": "0",
+        "datatype": "buffer",
+        "broker": "mqtt_broker_config",
+        "nl": false,
+        "rap": false,
+        "rh": 0,
+        "inputs": 0,
+        "x": 300,
+        "y": 360,
+        "wires": [
+            [
+                "prepare_sql"
+            ]
+        ]
+    },
+    {
+        "id": "prepare_sql",
+        "type": "function",
+        "z": "48e1fdf83194502a",
+        "name": "Prepara INSERT SQL",
+        "func": "\n\nmsg.topic = \"INSERT INTO klover.stove_log_test (creation_date, datagram) VALUES (now(), ?)\";\nmsg.payload = [msg.payload];\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 520,
+        "y": 360,
+        "wires": [
+            [
+                "mysql_insert"
+            ]
+        ]
+    },
+    {
+        "id": "mysql_insert",
+        "type": "mysql",
+        "z": "48e1fdf83194502a",
+        "mydb": "5b9105d26c12d1b1",
+        "name": "Insert stove_log",
+        "x": 740,
+        "y": 360,
+        "wires": [
+            [
+                "debug_out"
+            ]
+        ]
+    },
+    {
+        "id": "debug_out",
+        "type": "debug",
+        "z": "48e1fdf83194502a",
+        "name": "Debug SQL result",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 950,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "da9204c5806f806f",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-node-mysql": "2.0.0"
+        }
+    }
+]
